@@ -9,7 +9,7 @@ module.exports = {
   ...
   plugins: [
     ['postcss-custom-property-object', {
-        breakpoints: ['480px', '768px', '1200px'],
+        breakpoints: ['1200px', '768px'],
       }
     ]
   ]
@@ -18,8 +18,25 @@ module.exports = {
 ```
 
 ```css:style.css
+/* before */
 :root {
   --font: (16px, {sm: 12px | 10px | 8px, md: 24px, lg: 32px, xl: 48px});
+}
+/* after */
+:root {
+  --font: 16px;
+  @media screen and (min-width: 1200px) {
+    --font: 12px;
+  }
+  @media screen and (min-width: 769px) and (max-width: 1199px) {
+    --font: 10px;
+  }
+  @media screen and (max-width: 768px) {
+    --font: 8px;
+  }
+  --font-md: 24px;
+  --font-lg: 32px;
+  --font-xl: 48px;
 }
 ```
 
