@@ -15,7 +15,7 @@ jobs:
     outputs:
       version: ${{ steps.package-version.outputs.version }}
       tag-name: v${{ steps.package-version.outputs.version }}
-      tag-exist: ${{ steps.tag-exist.outputs.tag }}
+      tag-exist: ${{ steps.check-tag.outputs.tag }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
