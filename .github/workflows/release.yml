@@ -15,7 +15,7 @@ jobs:
     outputs:
       version: ${{ steps.package-version.outputs.version }}
       tag-name: v${{ steps.package-version.outputs.version }}
-      tag-exist: ${{ steps.check-tag.outputs.tag }}
+      tag-exist: ${{ steps.tag-check.outputs.tag }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -26,28 +26,22 @@ jobs:
         run: node -p -e '`::set-output name=version::${require("./package.json").version}`'
       - name: check tag exists
         uses: bbonkr/git-tag-check-action@v1.0.9
-        id: check-tag
+        id: tag-check
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ steps.package-version.outputs.version }}
-      - run: |
-          echo ${{ steps.package-version.outputs.version }}
-      - run: | 
-          echo ${{ steps.check-tag.outputs.tag }}
+          prefix: "v"
 
-  build:
-    name: build
+  publish:
     needs: setup
+    name: publish
     runs-on: ubuntu-latest
+    if: needs.setup.outputs.tag-exist == ''
     strategy:
       matrix:
         node-version: [16.x]
     steps:
-      - name: check
-        run: echo ${{ needs.setup.outputs.tag-exist }}
       - uses: actions/checkout@v2
-      - name: Create .npmrc to install private github packages
-        run: echo '${{ secrets.GPR_READ_TOKEN }}' > ${{ github.workspace }}/.npmrc
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
@@ -55,24 +49,6 @@ jobs:
           scope: "@cookie-gg"
       - run: npm i
       - run: npm run build
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  publish:
-    needs: setup
-    name: publish
-    runs-on: ubuntu-latest
-    if: needs.setup.outputs.tag-exist == 'false'
-    strategy:
-      matrix:
-        node-version: [16.x]
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          registry-url: "https://npm.pkg.github.com"
-          scope: "@cookie-gg"
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -81,7 +57,7 @@ jobs:
     name: release
     needs: setup
     runs-on: ubuntu-latest
-    if: needs.setup.outputs.tag-exist == 'false'
+    if: needs.setup.outputs.tag-exist == ''
     steps:
       - uses: actions/checkout@v2
       - name: create tag
