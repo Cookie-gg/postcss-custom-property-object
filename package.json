@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "A plugin for postcss, support custom property object",
   "main": "dist/index.js",
+  "private": false,
   "keywords": [
     "postcss",
     "postcss-plugin"
