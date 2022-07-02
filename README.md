@@ -16,8 +16,9 @@ yarn add -D postcss @cookie_gg/postcss-custom-property-object
 module.exports = {
   ...
   plugins: [
+    // other plugins...
     ['postcss-custom-property-object', {
-        breakpoints: ['1200px', '768px'],
+        parseColor: false,
       }
     ]
   ]
@@ -28,20 +29,12 @@ module.exports = {
 ```css:style.css
 /* before */
 :root {
-  --font: (16px, {sm: 12px | 10px | 8px, md: 24px, lg: 32px, xl: 48px});
+  --font: (16px, {sm: 12px, md: 24px, lg: 32px, xl: 48px});
 }
 /* after */
 :root {
   --font: 16px;
-  @media screen and (min-width: 1200px) {
-    --font: 12px;
-  }
-  @media screen and (min-width: 769px) and (max-width: 1199px) {
-    --font: 10px;
-  }
-  @media screen and (max-width: 768px) {
-    --font: 8px;
-  }
+  --font: 12px;
   --font-md: 24px;
   --font-lg: 32px;
   --font-xl: 48px;
@@ -50,14 +43,73 @@ module.exports = {
 
 ## Options
 
-**breakpoints: `Array<String>`**
+**parseColor: `boolean`**
 
-> default: `['480px', '768px', '1024px', '1200px']`
+> default: `false`
 
-Provide a custom set of breakpoints
+If `true`, the plugin will parse the color value on `rgb` or `hsl` functions and return a value of `rgb`.
 
-**token: `String`**
+```css:style.css
+/* before */
+:root {
+  --blue: (rgb(0, 85, 225), {lighter: rgb(156, 236, 251), light: rgb(101, 199, 247)});
+}
+/* after */
+:root {
+  --blue: 0, 85, 225;
+  --blue-lighter: 156, 236, 251;
+  --blue-light: 101, 199, 247;
+}
+```
 
-> default: '\*'
+## Additional Usage
 
-Define the skip token used to ignore portions of the shorthand.
+You can use this plugin with [postcss-short](https://github.com/csstools/postcss-short) and it makes it easier to use custom properties on calc, rgb and rgba function.
+
+```js:postcss.config.js
+module.exports = {
+  ...
+  plugins: [
+    // other plugins...
+    ['postcss-custom-property-object', {
+        parseColor: true,
+      }
+    ],
+    [
+      'postcss-functions',
+      {
+        functions: {
+          vrgb: (color) => `rgb(var(${color}))`,
+          vrgba: (color, opacity) => {
+            if (!opacity) return `rgba(var(${color}), 1)`;
+            return `rgba(var(${color}), ${opacity})`;
+          },
+          vcalc: (formula) =>
+            `calc(${formula
+              .split(/(\-{2}[^(\+|\*|\/|\s)]+)/g)
+              .map((r, i) => (i % 2 === 1 ? `var(${r})` : r))
+              .join('')})`,
+        },
+      },
+    ],
+  ]
+  ...
+}
+```
+
+then, you don't have to use `var()` anymore in calc, rgb and rgba functions.
+
+```css:style.css
+/* before */
+h1 {
+  color: vrgb(--red);
+  background-color: vrgba(--red, 0.5);
+  font-size: vcalc(--font-md * 2);
+}
+/* after */
+h1 {
+  color: rgb(var(--red));
+  background-color: rgba(var(--red), 0.5);
+  font-size: calc(var(--font-md) * 2);
+}
+```

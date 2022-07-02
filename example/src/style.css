@@ -1,6 +1,9 @@
 :root {
-  --blue: (rgb(0, 85, 225), {lighter: rgb(156, 236, 251), light: rgb(101, 199, 247), \5: rgb(0, 85, 225)});
-  --red: rgb(255, 255, 255);
-  --green: hsl(108, 100%, 50%);
-  --line: ({s: 1.25 | 1.35 | 1.5, m: 1.5, l: 1.75, xl: 2});
+  --font: (16px, {sm: 12px, md: 24px, lg: 32px, xl: 48px});
+  --red: rgb(226, 0, 0);
+}
+h1 {
+  color: vrgb(--red);
+  background-color: vrgba(--red, 0.5);
+  font-size: vcalc(--font-md * 2);
 }

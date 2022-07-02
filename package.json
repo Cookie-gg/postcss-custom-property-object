@@ -1,6 +1,6 @@
 {
   "name": "@cookie_gg/postcss-custom-property-object",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A plugin for postcss, support custom property object",
   "main": "dist/index.js",
   "private": false,
@@ -13,27 +13,19 @@
   "scripts": {
     "dev": "npx rimraf ./dist && ncc build src/index.ts -w",
     "build": "npx rimraf ./dist && ncc build src/index.ts -m",
-    "test:serve": "set NODE_ENV=development && webpack serve --mode production",
-    "test:build": "set NODE_ENV=production && webpack"
-  },
-  "dependencies": {
-    "postcss": "^8.4.14"
+    "test:serve": "cd ./example && npm run test:serve",
+    "test:build": "cd ./example && npm run test:build"
   },
   "devDependencies": {
     "@types/node": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "@vercel/ncc": "^0.34.0",
-    "css-loader": "^6.7.1",
+    "css-color-converter": "^2.0.0",
     "eslint": "^8.18.0",
     "eslint-config-prettier": "^8.5.0",
-    "postcss-loader": "^7.0.0",
+    "postcss": "^8.4.14",
     "prettier": "^2.7.1",
-    "style-loader": "^3.3.1",
-    "ts-loader": "^9.3.1",
-    "typescript": "^4.7.4",
-    "webpack": "^5.73.0",
-    "webpack-cli": "^4.10.0",
-    "webpack-dev-server": "^4.9.3"
+    "typescript": "^4.7.4"
   },
   "files": [
     "!*",
