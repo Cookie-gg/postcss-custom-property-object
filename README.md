@@ -2,6 +2,14 @@
 
 PostCSS plugin that makes it easier to define custom properties.
 
+## Install
+
+```bash
+npm i -D postcss @cookie_gg/postcss-custom-property-object
+# or
+yarn add -D postcss @cookie_gg/postcss-custom-property-object
+```
+
 ## Usage
 
 ```js:postcss.config.js
