@@ -57,6 +57,7 @@ jobs:
     name: release
     needs: setup
     runs-on: ubuntu-latest
+    if: needs.setup.outputs.tag-exist == ''
     steps:
       - uses: actions/checkout@v2
       - name: create tag
