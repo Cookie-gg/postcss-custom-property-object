@@ -45,10 +45,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           registry-url: "https://registry.npmjs.org"
-          scope: "@cookie-gg"
+          scope: "@cookie_gg"
       - run: npm i
       - run: npm run build
-      - run: npm publish --access=public
+      - run: npm publish --access=public ./
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
