@@ -11,8 +11,8 @@
   "author": "Cookie_gg",
   "license": "MIT",
   "scripts": {
-    "dev": "npx rimraf ./dist && tsc",
-    "build": "npx rimraf ./dist && tsc -w",
+    "dev": "npx rimraf ./dist && tsc -w",
+    "build": "npx rimraf ./dist && tsc",
     "test:serve": "cd ./example && npm run test:serve",
     "test:build": "cd ./example && npm run test:build"
   },
