@@ -17,7 +17,7 @@ module.exports = {
   ...
   plugins: [
     // other plugins...
-    ['postcss-custom-property-object', {
+    ['@cookie_gg/postcss-custom-property-object', {
         parseColor: false,
       }
     ]
