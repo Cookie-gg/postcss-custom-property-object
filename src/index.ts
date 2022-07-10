@@ -32,9 +32,7 @@ const plugin: Plugin = (decl, { parseColor }) => {
 module.exports = (opts: Options = {}): PostCSS.Plugin => {
   return {
     postcssPlugin: 'postcss-custom-property-object',
-    Rule: (rule) => {
-      rule.each((child) => child.type === 'decl' && plugin(child, opts));
-    },
+    Declaration: (decl) => plugin(decl, opts),
   };
 };
 

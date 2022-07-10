@@ -1,6 +1,6 @@
 {
   "name": "@cookie_gg/postcss-custom-property-object",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A plugin for postcss, support custom property object",
   "main": "dist/index.js",
   "private": false,
